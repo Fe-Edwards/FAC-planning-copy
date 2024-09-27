@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game with Faster Ball</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background-color: black;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="pongCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let ball, leftPaddle, rightPaddle, leftScore, rightScore;
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            ball = {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                radius: 10,
+                dx: 10,  // Increased to 10
+                dy: 10   // Increased to 10
+            };
+
+            const paddleHeight = canvas.height / 3;
+            const paddleWidth = 15;
+
+            leftPaddle = {
+                x: 0,
+                y: (canvas.height - paddleHeight) / 2,
+                width: paddleWidth,
+                height: paddleHeight
+            };
+
+            rightPaddle = {
+                x: canvas.width - paddleWidth,
+                y: (canvas.height - paddleHeight) / 2,
+                width: paddleWidth,
+                height: paddleHeight
+            };
+
+            leftScore = rightScore = 0;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
+            ctx.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
+
+            ctx.font = '32px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(leftScore, canvas.width / 4, 50);
+            ctx.fillText(rightScore, 3 * canvas.width / 4, 50);
+        }
+
+        function update() {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                ball.dy = -ball.dy;
+            }
+
+            const hitLeftPaddle = ball.x - ball.radius < leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height;
+            const hitRightPaddle = ball.x + ball.radius > rightPaddle.x && ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.height;
+
+            if (hitLeftPaddle || hitRightPaddle) {
+                ball.dx = -ball.dx;
+            }
+
+            if (ball.x + ball.radius < 0) {
+                rightScore++;
+                resetBall();
+            } else if (ball.x - ball.radius > canvas.width) {
+                leftScore++;
+                resetBall();
+            }
+
+            const paddleSpeed = 10;
+            if (keys['w'] && leftPaddle.y > 0) leftPaddle.y -= paddleSpeed;
+            if (keys['s'] && leftPaddle.y < canvas.height - leftPaddle.height) leftPaddle.y += paddleSpeed;
+            if (keys['ArrowUp'] && rightPaddle.y > 0) rightPaddle.y -= paddleSpeed;
+            if (keys['ArrowDown'] && rightPaddle.y < canvas.height - rightPaddle.height) rightPaddle.y += paddleSpeed;
+        }
+
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            const speed = 10;  // Increased to 10
+            const angle = Math.random() * Math.PI / 2 - Math.PI / 4; // Random angle between -45 and 45 degrees
+            ball.dx = speed * Math.cos(angle) * (Math.random() < 0.5 ? 1 : -1);
+            ball.dy = speed * Math.sin(angle);
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        const keys = {};
+        document.addEventListener('keydown', e => keys[e.key] = true);
+        document.addEventListener('keyup', e => keys[e.key] = false);
+
+        window.addEventListener('resize', init);
+
+        init();
+        gameLoop();
+    </script>
+</body>
+</html>
