@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple ChatGPT Clone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #app {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        #apiKeyForm, #chatInterface {
+            display: none;
+        }
+        #chatMessages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .user {
+            background-color: #e6f2ff;
+            text-align: right;
+        }
+        .assistant {
+            background-color: #f0f0f0;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #removeApiKey {
+            background-color: #f44336;
+        }
+        #removeApiKey:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="apiKeyForm">
+            <h2>Enter your OpenAI API Key</h2>
+            <input type="text" id="apiKey" placeholder="Enter your OpenAI API Key">
+            <button onclick="saveApiKey()">Save API Key</button>
+        </div>
+        <div id="chatInterface">
+            <h2>ChatGPT Clone</h2>
+            <div id="chatMessages"></div>
+            <textarea id="userInput" placeholder="Type your message here..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+            <button id="removeApiKey" onclick="removeApiKey()">Remove API Key</button>
+        </div>
+    </div>
+
+    <script>
+        const apiKeyForm = document.getElementById('apiKeyForm');
+        const chatInterface = document.getElementById('chatInterface');
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKey').value;
+            if (apiKey) {
+                localStorage.setItem('openaiApiKey', apiKey);
+                showChatInterface();
+            } else {
+                alert('Please enter a valid API key');
+            }
+        }
+
+        function removeApiKey() {
+            localStorage.removeItem('openaiApiKey');
+            showApiKeyForm();
+        }
+
+        function showChatInterface() {
+            apiKeyForm.style.display = 'none';
+            chatInterface.style.display = 'block';
+        }
+
+        function showApiKeyForm() {
+            apiKeyForm.style.display = 'block';
+            chatInterface.style.display = 'none';
+            chatMessages.innerHTML = ''; // Clear chat messages
+        }
+
+        function addMessage(content, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user' : 'assistant');
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            userInput.value = '';
+
+            const apiKey = localStorage.getItem('openaiApiKey');
+            try {
+                const response = await axios.post(
+                    'https://api.openai.com/v1/chat/completions',
+                    {
+                        model: 'gpt-3.5-turbo',
+                        messages: [{ role: 'user', content: message }],
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+
+                const assistantReply = response.data.choices[0].message.content;
+                addMessage(assistantReply, false);
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Error: Unable to get a response from the API.', false);
+            }
+        }
+
+        // Check if API key exists in localStorage
+        if (localStorage.getItem('openaiApiKey')) {
+            showChatInterface();
+        } else {
+            showApiKeyForm();
+        }
+
+        // Allow sending message with Enter key
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
