@@ -1,4 +1,4 @@
-# Mini-workshop: planning a project
+# Workshop: Project planning
 
 ## In pairs 
 
