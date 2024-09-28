@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple One-Page Website</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #ddd;
+        }
+        section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            transition: background-color 0.5s ease;
+        }
+        section:target {
+            background-color: #f8f8f8;
+        }
+        #hello { background-color: #f0f0f0; }
+        #keep-going { background-color: #e0e0e0; }
+        #goodbye { background-color: #d0d0d0; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#hello">Hello</a>
+        <a href="#keep-going">Keep going</a>
+        <a href="#goodbye">Goodbye</a>
+    </nav>
+
+    <section id="hello">
+        <h2>Hello</h2>
+    </section>
+
+    <section id="keep-going">
+        <h2>Keep going</h2>
+    </section>
+
+    <section id="goodbye">
+        <h2>Goodbye</h2>
+    </section>
+</body>
+</html>
