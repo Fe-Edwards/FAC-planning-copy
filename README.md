@@ -3,7 +3,7 @@
 ## In pairs 
 
 ### Step 1: Play the game
-Take a look at this simple implementation of the classic arcade game [Pong](https://facapplicants.github.io/planning/pong.html).
+Take a look, for example, at this simple implementation of the classic arcade game [Pong](https://facapplicants.github.io/planning/pong.html).
 
 ### Step 2: Break it into parts
 Make a list of all the elements and interactions required to recreate what you see in your browser window.
