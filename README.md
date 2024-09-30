@@ -9,7 +9,7 @@ Take a look, for example, at this simple implementation of the classic arcade ga
 Make a list of all the elements and interactions required to recreate what you see in your browser window.
 
 ### Step 3: Put the list into a sequential order
-Imagine you are building it from scratch. Put your list of elements and interactions into a sensible task list from start to finish. Think carefully about the sequence.
+Imagine you are building it from scratch. Put your list of elements and interactions into a sensible task list from start to finish. Think carefully about the sequence. For example, a ball cannot move until it has been created.
 
 ## As a group
 
