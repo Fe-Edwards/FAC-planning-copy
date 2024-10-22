@@ -19,3 +19,12 @@ Decide collectively in what order we are going to build the different parts of t
 #### Roles
 - **Scribe**: Document our decisions and agreed-upon sequence.
 - **Facilitator**: Guides the discussion, ensuring everyone's ideas are heard and keeping us focused.
+
+### Links to published pages
+- [Hello](https://facapplicants.github.io/planning/hello.html), see also [80 concepts](hello.md)
+- [Pong](https://facapplicants.github.io/planning/pong.html)
+- [Breakout](https://facapplicants.github.io/planning/breakout.html)
+- [Snake](https://facapplicants.github.io/planning/snake.html)
+- [Todo](https://facapplicants.github.io/planning/todo.html)
+- [Chat](https://facapplicants.github.io/planning/chat.html)
+
